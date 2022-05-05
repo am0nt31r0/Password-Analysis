@@ -1,5 +1,5 @@
 # Password-Analysis
-Go script to analyse a list of passwords. Useful for penetration tests and phishing campaigns.
+Go script to analyze a list of passwords. Useful for penetration tests and phishing campaigns.
 
 ## Considerations
 The script requires two txt files to execute successfully. The first one contains the passwords to be analysed - one password per line - and the second must be a dictionary of weak passwords, like rockyou.txt.
