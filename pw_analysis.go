@@ -74,14 +74,12 @@ func passwordAnalysis(pwdList string, dicList string) {
 	scanner := bufio.NewScanner(f)
 
 	writer := tabwriter.NewWriter(os.Stdout, 40, 8, 1, '\t', tabwriter.AlignRight)
-	fmt.Fprintln(writer, "\nPASSWORD\tLENGTH\tENTROPY\tSTRENGTH\n")
+	fmt.Fprintln(writer, "\nPASSWORD\tLENGTH\tENTROPY\tSCORE\n")
 
 	for scanner.Scan() {
 		pwd := scanner.Text()
 		pwdSize := len(scanner.Text())
-
 		averagePwd = append(averagePwd, pwdSize)
-
 		entropyScore := entropy.Shannon(pwd)
 
 		if smallerPwdSize > pwdSize {
