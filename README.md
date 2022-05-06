@@ -1,5 +1,5 @@
 # Password-Analysis
-Script in Go that analyzes a list of passwords based on its entropy and in weak passwords from a dictionary. Useful for penetration tests and phishing campaigns.
+Script in Go that analyzes a list of passwords based in its entropy and in weak passwords from a dictionary. Useful for penetration tests and phishing campaigns.
 
 ## Considerations
 The script requires two txt files to execute successfully. The first one contains the passwords to be analysed - one password per line - and the second must be a dictionary of weak passwords, like rockyou.txt.
