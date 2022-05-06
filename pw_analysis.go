@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"regexp"
 	"strings"
 	"text/tabwriter"
+
+	"github.com/Xe/x/entropy"
 )
 
 func sum(array []int) int {
@@ -45,21 +46,16 @@ func checkVeryWeak(word string, dictionary string) string {
 
 func passwordAnalysis(pwdList string, dicList string) {
 
-	// Initiate Regexes
-	lowCase, err := regexp.Compile(`[a-z]`)                                  // Checks for lower case substring
-	upCase, err := regexp.Compile(`[A-Z]`)                                   // Checks for upper case substring
-	numbers, err := regexp.Compile(`[0-9]`)                                  // Checks for digit substring
-	symbols, err := regexp.Compile(`[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]`) // Checks for symbol substring
-	whitespace, err := regexp.Compile(`\S+`)                                 // Checks for whitespace substring
 	var strength = ""
 	smallerPwdSize := 1000
 	biggerPwdSize := 0
 	var averagePwd = []int{}
 	nExcelent := 0
-	nVStrong := 0
 	nStrong := 0
-	nVWeak := 0
 	nWeak := 0
+	nBadD := 0
+	nBad := 0
+	nPoor := 0
 
 	fmt.Println("[+] Password Analysis Software\n")
 	fmt.Println("Starting password analysis of: " + pwdList)
@@ -78,13 +74,15 @@ func passwordAnalysis(pwdList string, dicList string) {
 	scanner := bufio.NewScanner(f)
 
 	writer := tabwriter.NewWriter(os.Stdout, 40, 8, 1, '\t', tabwriter.AlignRight)
-	fmt.Fprintln(writer, "\nPASSWORD\tLENGTH\tSTRENGTH\n")
+	fmt.Fprintln(writer, "\nPASSWORD\tLENGTH\tENTROPY\tSTRENGTH\n")
 
 	for scanner.Scan() {
 		pwd := scanner.Text()
 		pwdSize := len(scanner.Text())
 
 		averagePwd = append(averagePwd, pwdSize)
+
+		entropyScore := entropy.Shannon(pwd)
 
 		if smallerPwdSize > pwdSize {
 			smallerPwdSize = pwdSize
@@ -94,32 +92,35 @@ func passwordAnalysis(pwdList string, dicList string) {
 			biggerPwdSize = pwdSize
 		}
 
-		if (lowCase.MatchString(pwd) && upCase.MatchString(pwd) && numbers.MatchString(pwd) && symbols.MatchString(pwd) && whitespace.MatchString(pwd) && pwdSize > 19) || (lowCase.MatchString(pwd) && upCase.MatchString(pwd) && numbers.MatchString(pwd) && symbols.MatchString(pwd) && pwdSize > 24) {
+		if entropyScore >= 100 {
 			strength = "Excelent"
 			nExcelent += 1
-		} else if (lowCase.MatchString(pwd) && upCase.MatchString(pwd) && numbers.MatchString(pwd) && symbols.MatchString(pwd) && whitespace.MatchString(pwd) && pwdSize > 11) || (lowCase.MatchString(pwd) && upCase.MatchString(pwd) && numbers.MatchString(pwd) && symbols.MatchString(pwd) && pwdSize > 14) {
-			strength = "Very Strong"
-			nVStrong += 1
-		} else if (lowCase.MatchString(pwd) && upCase.MatchString(pwd) && numbers.MatchString(pwd) && symbols.MatchString(pwd) && pwdSize > 7) || (lowCase.MatchString(pwd) && upCase.MatchString(pwd) && numbers.MatchString(pwd) && symbols.MatchString(pwd) && whitespace.MatchString(pwd) && pwdSize > 7) {
+		} else if entropyScore > 65 {
 			strength = "Strong"
 			nStrong += 1
 		} else {
 			if checkVeryWeak(pwd, dicList) != "" {
-				strength = "Very Weak"
-				nVWeak += 1
-			} else {
+				strength = "Bad - Dictionary"
+				nBadD += 1
+			} else if entropyScore > 40 {
 				strength = "Weak"
 				nWeak += 1
+			} else if entropyScore <= 0 {
+				strength = "Bad"
+				nBad += 1
+			} else {
+				strength = "Poor"
+				nPoor += 1
 			}
 		}
 
-		fmt.Fprintln(writer, pwd, "\t", pwdSize, "\t", strength)
+		fmt.Fprintln(writer, pwd, "\t", pwdSize, "\t", entropyScore, "\t", strength)
 		writer.Flush()
 	}
 
 	averagePwdSize := sum(averagePwd) / len(averagePwd)
 
-	fmt.Printf("\n\nStatistics:\n- Total passwords analysed: %d.\n- Number of Excelent Passwords: %d.\n- Number of Very Strong Passwords: %d.\n- Number of Strong Passwords: %d.\n- Number of Weak Passwords: %d.\n- Number of Very Weak Passwords: %d.\n", len(averagePwd), nExcelent, nVStrong, nStrong, nWeak, nVWeak)
+	fmt.Printf("\n\nStatistics:\n- Total passwords analysed: %d.\n- Number of excelent passwords: %d.\n- Number of strong passwords: %d.\n- Number of weak passwords: %d.\n- Number of poor passwords: %d.\n- Number of bad passwords: %d.\n- Number of bad passwords contained in the dictionary: %d.\n", len(averagePwd), nExcelent, nStrong, nWeak, nPoor, nBad, nBadD)
 	fmt.Printf("- The smaller password has the size of %d characters.\n- The biggest password has the size of %d characters.\n- The average size is %d.", smallerPwdSize, biggerPwdSize, averagePwdSize)
 
 	if err := scanner.Err(); err != nil {
