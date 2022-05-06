@@ -54,7 +54,6 @@ pwdAnalysis pwds.txt rockyou.txt
 Starting password analysis of: pwds.txt
 Using rockyou.txt as dictionary of comparison.
 
-
 PASSWORD                                LENGTH                                  ENTROPY                                 STRENGTH
 
 12345 a                                  7                                       21                                      Poor
@@ -66,17 +65,18 @@ sa#X#2 34                                9                                      
 QWE123!"# $sds1                          15                                      60                                      Weak
 123456789                                9                                       36                                      Bad - Dictionary
 QWE123!"# $sds1zxczxc4"3r1 a             28                                      140                                     Excelent
+C3kGUJeV98c234_34                        17                                      68                                      Strong
 
 
 Statistics:
-- Total passwords analysed: 9.
+- Total passwords analysed: 10.
 - Number of excelent passwords: 1.
-- Number of strong passwords: 0.
+- Number of strong passwords: 1.
 - Number of weak passwords: 2.
 - Number of poor passwords: 4.
 - Number of bad passwords: 0.
 - Number of bad passwords contained in the dictionary: 2.
 - The smaller password has the size of 6 characters.
 - The biggest password has the size of 28 characters.
-- The average size is 11. 
+- The average size is 12.
 ```
