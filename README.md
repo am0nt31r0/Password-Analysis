@@ -1,27 +1,6 @@
 # Password Analysis: Based on Entropy and Dictionaries of Weak Passwords
 Script in Go that analyzes a list of passwords.
 
-## Considerations
-The script requires two txt files to execute successfully. The first one contains the passwords to be analysed - one password per line - and the second must be a dictionary of weak passwords, like rockyou.txt.
-
-The entropy score used to classify the passwords is the same that is used by KeePassXC:
-https://keepassxc.org/blog/2020-08-15-keepassxc-password-healthcheck/
-
-Download the entropy source code to your src directory:
-- https://github.com/Xe/x/tree/master/entropy (Thanks Xe for the Shannon entropy equation implementation)
-- For example:
-```
-└─$ tree src 
-src
-├── github.com
-│   └── Xe
-│       └── x
-│           └── entropy
-│               ├── doc.go
-│               ├── shannon.go
-│               └── shannon_test.go
-```
-
 ## Download and Compilation
 
 You can download the binary directly from the releases. If you prefer to compile it manually, consider the following steps.
@@ -47,6 +26,27 @@ go/
 │                   └── shannon_test.go
 |   ├── Password Analysis
 |       ├── pw_analysis.go
+```
+
+## Considerations
+The script requires two txt files to execute successfully. The first one contains the passwords to be analysed - one password per line - and the second must be a dictionary of weak passwords, like rockyou.txt.
+
+The entropy score used to classify the passwords is the same that is used by KeePassXC:
+https://keepassxc.org/blog/2020-08-15-keepassxc-password-healthcheck/
+
+Download the entropy source code to your src directory:
+- https://github.com/Xe/x/tree/master/entropy (Thanks Xe for the Shannon entropy equation implementation)
+- For example:
+```
+└─$ tree src 
+src
+├── github.com
+│   └── Xe
+│       └── x
+│           └── entropy
+│               ├── doc.go
+│               ├── shannon.go
+│               └── shannon_test.go
 ```
 
 ## Usage
