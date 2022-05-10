@@ -23,6 +23,9 @@ src
 ```
 
 ## Download and Compilation
+
+You can download the binary directly from the releases. If you prefer to compile it manually, consider the following steps.
+
 ```
 git clone https://github.com/am0nt31r0/Password-Analysis.git
 cd Password-Analysis
