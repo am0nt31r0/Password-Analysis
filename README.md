@@ -28,7 +28,7 @@ go/
 |       ├── pw_analysis.go
 ```
 
-## Considerations
+## Requirements
 The script requires two txt files to execute successfully. The first one contains the passwords to be analysed - one password per line - and the second must be a dictionary of weak passwords, like rockyou.txt.
 
 The entropy score used to classify the passwords is the same that is used by KeePassXC:
